@@ -32,26 +32,18 @@ const pdf_to_image = async (filepath) => {
 }
 
 const base64_encode = (file) => {
-  // let bitmap = fs.readFileSync(file);
-  // console.log(bitmap)
-  // return new Buffer(bitmap).toString('base64');
-  var request = require('request').defaults({ encoding: null });
-
-  request.get(file, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      data = new Buffer(body).toString('base64');
-      console.log(data);
-    }
-  });
+  let bitmap = fs.readFileSync(file);
+  console.log(bitmap)
+  return new Buffer(bitmap).toString('base64');
 };
 
 const google_api = (fileArray) => {
   _.map(fileArray, each => {
-    // const encodedFile = base64_encode(each);
+    const encodedFile = base64_encode(each);
     const fileObj = {
       "image": {
         "source": {
-          "imageUri": each
+          "imageUri": encodedFile
         }
       },
       "features": [{
