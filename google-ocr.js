@@ -42,7 +42,9 @@ const google_api = (fileArray) => {
     const encodedFile = base64_encode(each);
     const fileObj = {
       "image": {
-        "content": encodedFile
+        "source": {
+          "imageUri": encodedFile
+        }
       },
       "features": [{
         "type": "TEXT_DETECTION",
@@ -54,6 +56,7 @@ const google_api = (fileArray) => {
     };
     requestObj.requests.push(fileObj);
   });
+  console.log(JSON.stringify(requestObj))
   axios.post(url, requestObj)
     .then(outPut => {
       console.log(outPut.data.responses[0].textAnnotations[0].description);
