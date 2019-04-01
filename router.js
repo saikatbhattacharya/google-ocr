@@ -2,6 +2,7 @@ var bodyParser = require('body-parser');
 var multer = require("multer");
 var upload = multer({ dest: "./uploads" });
 var path = require('path');
+var cors = require('cors');
 var OCR = require('./requestHandler');
 
 module.exports = function (app) {
@@ -10,7 +11,7 @@ module.exports = function (app) {
 
   // parse application/json 
   app.use(bodyParser.json())
-
+  app.use(cors());
   app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
   })
