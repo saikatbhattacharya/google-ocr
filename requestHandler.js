@@ -63,6 +63,7 @@ const process_pdf = (file, res) => {
     process_file(imagePaths, res);
   })
     .catch((err) => {
+      console.log(err)
       res.sendStatus(500);
       res.send(err);
   })
