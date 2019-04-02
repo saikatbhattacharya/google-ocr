@@ -39,6 +39,7 @@ const process_file = (files, res) => {
       res.send({ resData });
     })
     .catch(err => {
+      res.sendStatus(500)
       res.send(err)
     })
 };
@@ -58,9 +59,13 @@ const pdf_converter = (i, pdfImage) => {
 const process_pdf = (file, res) => {
   let pdfImage = new PDFImage("./uploads/" + file.filename);
   pdfImage.convertFile().then(function (imagePaths) {
+    console.log(imagePaths);
     process_file(imagePaths, res);
   })
-    .catch((err) => res.send(err))
+    .catch((err) => {
+      res.sendStatus(500);
+      res.send(err);
+  })
 };
 
 module.exports = {
