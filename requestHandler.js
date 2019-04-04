@@ -1,8 +1,6 @@
 const fs = require('fs');
 const axios = require('axios');
-const PDFImage = require('pdf-image').PDFImage;
 const im = require('imagemagick');
-const exec = require('child_process').exec;
 
 const url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyATwGub6h3WxIja3LADI8V79F84_sry03k";
 
@@ -29,7 +27,6 @@ const process_file = (files = [], res) => {
     };
     requestObj.requests.push(fileObj);
   });
-  console.log(requestObj);
   axios.post(url, requestObj)
     .then(outPut => {
       for (const file of files) {
@@ -54,7 +51,7 @@ const google_api = (file, res) => {
 };
 
 const process_pdf = async (file, res) => {
-  im.convert(['convert', '-geometry', '3600x3600', '-density', '300x300', '-quality', '100', `./uploads/${file.filename}`, '-resize', '50%', `./uploads/NR.jpg`], (err) => {
+  im.convert(['convert', '-geometry', '3600x3600', '-density', '300x300', '-quality', '100', `./uploads/${file.filename}[0-10]`, '-resize', '50%', `./uploads/NR.jpg`], (err) => {
     console.log(err);
     process_file([], res);
   })
