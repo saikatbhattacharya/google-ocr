@@ -1,14 +1,18 @@
 const fs = require('fs');
 const axios = require('axios');
 const PDFImage = require('pdf-image').PDFImage;
+const im = require('imagemagick');
+const exec = require('child_process').exec;
 
 const url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyATwGub6h3WxIja3LADI8V79F84_sry03k";
 
-const process_file = (files, res) => {
+const process_file = (files = [], res) => {
   const requestObj = {
     requests: []
   };
-  files.slice(0, 10).map(file => {
+  files = files.length ? files : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(f => `./uploads/NR-${f}.jpg`);
+  console.log(files);
+  files.map(file => {
     let bitmap = fs.readFileSync(file);
     const encodedFile = new Buffer(bitmap).toString('base64');
     const fileObj = {
@@ -24,7 +28,8 @@ const process_file = (files, res) => {
       }
     };
     requestObj.requests.push(fileObj);
-  })
+  });
+  console.log(requestObj);
   axios.post(url, requestObj)
     .then(outPut => {
       for (const file of files) {
@@ -48,24 +53,10 @@ const google_api = (file, res) => {
   process_file(["./uploads/" + file.filename], res);
 };
 
-const pdf_converter = (i, pdfImage) => {
-  return new Promise((resolve) => {
-    pdfImage.convertPage(i).then(function (imagePath) {
-      resolve();
-    });
-  });
-};
-
-const process_pdf = (file, res) => {
-  let pdfImage = new PDFImage("./uploads/" + file.filename);
-  pdfImage.convertFile().then(function (imagePaths) {
-    console.log(imagePaths);
-    process_file(imagePaths, res);
-  })
-    .catch((err) => {
-      console.log(err)
-      res.sendStatus(500);
-      res.send(err);
+const process_pdf = async (file, res) => {
+  im.convert(['convert', '-geometry', '3600x3600', '-density', '300x300', '-quality', '100', `./uploads/${file.filename}`, '-resize', '50%', `./uploads/NR.jpg`], (err) => {
+    console.log(err);
+    process_file([], res);
   })
 };
 
