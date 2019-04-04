@@ -1,5 +1,3 @@
-```javascript
-
 var cors = require('cors');
 const PDFImage = require('pdf-image').PDFImage;
 const express = require('express');
@@ -59,4 +57,4 @@ convert_pdf('/usr/src/app/uploads/NRISINGHA-RAHASYA.pdf');
 
 app.listen(PORT, HOST);
 console.log(`--UPLOAD API-- Running on http://${HOST}:${PORT}`);
-```
+
