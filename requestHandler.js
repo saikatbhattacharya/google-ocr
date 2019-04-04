@@ -4,11 +4,11 @@ const im = require('imagemagick');
 
 const url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyATwGub6h3WxIja3LADI8V79F84_sry03k";
 
-const process_file = (files = [], res) => {
+const process_file = (files = [], res, fileName = '') => {
   const requestObj = {
     requests: []
   };
-  files = files.length ? files : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(f => `./uploads/NR-${f}.jpg`);
+  files = files.length ? files : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(f => `./uploads/${fileName}-${f}.jpg`);
   console.log(files);
   files.map(file => {
     let bitmap = fs.readFileSync(file);
@@ -51,9 +51,9 @@ const google_api = (file, res) => {
 };
 
 const process_pdf = async (file, res) => {
-  im.convert(['convert', '-geometry', '3600x3600', '-density', '300x300', '-quality', '100', `./uploads/${file.filename}[0-10]`, '-resize', '50%', `./uploads/NR.jpg`], (err) => {
+  im.convert(['convert', '-geometry', '3600x3600', '-density', '300x300', '-quality', '100', `./uploads/${file.filename}[0-10]`, '-resize', '50%', `./uploads/${file.filename}.jpg`], (err) => {
     console.log(err);
-    process_file([], res);
+    process_file([], res, file.filename);
   })
 };
 
