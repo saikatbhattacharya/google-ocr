@@ -4,3 +4,5 @@ uploads
 *.txt
 *.pdf
 *.html
+UI/build
+.DS_Store
