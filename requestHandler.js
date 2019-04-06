@@ -5,49 +5,55 @@ const im = require('imagemagick');
 const url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyATwGub6h3WxIja3LADI8V79F84_sry03k";
 
 const process_file = (files = [], res, fileName = '') => {
+  fs.unlinkSync(`./uploads/${fileName}`);
   const requestObj = {
     requests: []
   };
-  files = files.length ? files : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(f => `./uploads/${fileName}-${f}.jpg`);
-  console.log(files);
-  files.map(file => {
-    let bitmap = fs.readFileSync(file);
-    const encodedFile = new Buffer(bitmap).toString('base64');
-    const fileObj = {
-      "image": {
-        "content": encodedFile
-      },
-      "features": [{
-        "type": "TEXT_DETECTION",
-        "maxResults": 1
-      }],
-      "imageContext": {
-        "languageHints": ["bn"]
-      }
-    };
-    requestObj.requests.push(fileObj);
-  });
-  axios.post(url, requestObj)
-    .then(outPut => {
-      for (const file of files) {
-        fs.unlink(file, err => {
-          if (err) throw err;
-        });
-      }
-      let resData = [];
-      outPut.data.responses.forEach((each, i) => {
-        resData.push(each.textAnnotations[0].description);
+  fs.readdir('./uploads', (fileError, fileList) => {
+    files = files.length ? files : fileList.filter(f => f.includes(fileName) && f.includes('.jpg'));
+    console.log(files);
+    files.map(file => {
+      let bitmap = fs.readFileSync(`./uploads/${file}`);
+      const encodedFile = new Buffer(bitmap).toString('base64');
+      const fileObj = {
+        "image": {
+          "content": encodedFile
+        },
+        "features": [{
+          "type": "TEXT_DETECTION",
+          "maxResults": 1
+        }],
+        "imageContext": {
+          "languageHints": ["bn"]
+        }
+      };
+      requestObj.requests.push(fileObj);
+    });
+    axios.post(url, requestObj)
+      .then(outPut => {
+        for (const file of files) {
+          fs.unlink(`./uploads/${file}`, err => {
+            if (err) throw err;
+          });
+        }
+        let resData = [];
+        console.log(outPut.data);
+        outPut.data.responses.forEach((each, i) => {
+          resData.push(each.textAnnotations[0].description);
+        })
+        res.send({ resData });
       })
-      res.send({ resData });
-    })
-    .catch(err => {
-      res.sendStatus(500)
-      res.send(err)
-    })
+      .catch(err => {
+        console.log(err)
+        res.status(400)
+        res.send(err)
+      })
+  })
+
 };
 
 const google_api = (file, res) => {
-  process_file(["./uploads/" + file.filename], res);
+  process_file([file.filename], res);
 };
 
 const process_pdf = async (file, res) => {

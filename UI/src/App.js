@@ -23,7 +23,8 @@ class App extends Component {
 		return (
 			<div className="App">
 				<header className="App-header">
-					<h1 className="App-title">Upload File</h1>
+					<h1 className="App-title">Upload a pdf or jpg/png file</h1>
+					<h5>(PDF should not have more than 10 pages)</h5>
 				</header>
 				<div className="filepond-box">
 					<FilePond
@@ -35,7 +36,7 @@ class App extends Component {
 								{
 									responseText: [
 										...this.state.responseText,
-										JSON.parse(file.serverId).resData
+										JSON.parse(file.serverId) ? JSON.parse(file.serverId).resData : 'Some error!!'
 									]
 								});
 
