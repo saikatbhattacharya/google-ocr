@@ -5,7 +5,7 @@ const im = require('imagemagick');
 const url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyATwGub6h3WxIja3LADI8V79F84_sry03k";
 
 const process_file = (files = [], res, fileName = '') => {
-  fs.unlinkSync(`./uploads/${fileName}`);
+  files.length ? null : fs.unlinkSync(`./uploads/${fileName}`);
   const requestObj = {
     requests: []
   };
