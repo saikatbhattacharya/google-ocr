@@ -6,9 +6,10 @@
     "filepond": "^4.3.4",
     "react": "^16.8.5",
     "react-dom": "^16.8.5",
+    "react-dropdown": "^1.6.4",
     "react-filepond": "^7.0.1",
-    "react-script": "^2.0.5",
     "react-scripts": "2.1.8"
+
   },
   "scripts": {
     "start": "react-scripts start",
