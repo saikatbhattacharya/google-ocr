@@ -4,7 +4,7 @@ const im = require('imagemagick');
 
 const url = "https://vision.googleapis.com/v1/images:annotate?key=AIzaSyATwGub6h3WxIja3LADI8V79F84_sry03k";
 
-const process_file = (files = [], res, fileName = '') => {
+const process_file = (files = [], res, fileName = '', lang = 'bn') => {
   files.length ? null : fs.unlinkSync(`./uploads/${fileName}`);
   const requestObj = {
     requests: []
@@ -24,7 +24,7 @@ const process_file = (files = [], res, fileName = '') => {
           "maxResults": 1
         }],
         "imageContext": {
-          "languageHints": ["bn"]
+          "languageHints": [lang]
         }
       };
       requestObj.requests.push(fileObj);
@@ -56,10 +56,10 @@ const google_api = (file, res) => {
   process_file([file.filename], res);
 };
 
-const process_pdf = async (file, res) => {
+const process_pdf = async (file, lang, res) => {
   im.convert(['convert', '-geometry', '3600x3600', '-density', '300x300', '-quality', '100', `./uploads/${file.filename}[0-10]`, '-resize', '50%', `./uploads/${file.filename}.jpg`], (err) => {
     console.log(err);
-    process_file([], res, file.filename);
+    process_file([], res, file.filename, lang);
   })
 };
 

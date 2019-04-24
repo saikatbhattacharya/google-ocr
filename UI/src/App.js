@@ -4,8 +4,8 @@ import Dropdown from "react-dropdown";
 import "filepond/dist/filepond.min.css";
 import "react-dropdown/style.css";
 import "./App.css";
-const uploadEndpoint = "http://ec2-18-188-52-63.us-east-2.compute.amazonaws.com:4000/fileupload"
-// const uploadEndpoint = "http://localhost:9000/fileupload";
+// const uploadEndpoint = "http://ec2-18-188-52-63.us-east-2.compute.amazonaws.com:4000/fileupload"
+const uploadEndpoint = "http://localhost:4000/fileupload";
 const langOptions = [
   { value: null, label: "-Select a Language-" },
   { value: "as", label: "Assamese" },

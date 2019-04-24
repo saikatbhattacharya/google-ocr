@@ -19,7 +19,7 @@ module.exports = function (app) {
 
   app.post("/fileupload", upload.single("filename"), function (req, res) {
     if (req.file.mimetype === 'application/pdf') OCR.process_pdf(req.file, res);
-    else if (req.file.mimetype === 'image/jpeg' || req.file.mimetype === 'image/png') OCR.google_api(req.file, res);
+    else if (req.file.mimetype === 'image/jpeg' || req.file.mimetype === 'image/png') OCR.google_api(req.file, req.body.lang, res);
     else {
       res.senFdStatus(400);
       res.send({ resData: 'File type is not supported' })
