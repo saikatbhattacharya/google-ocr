@@ -52,8 +52,8 @@ const process_file = (files = [], res, fileName = '', lang = 'bn') => {
 
 };
 
-const google_api = (file, res) => {
-  process_file([file.filename], res);
+const google_api = (file, lang, res) => {
+  process_file([file.filename], res, '', lang);
 };
 
 const process_pdf = async (file, lang, res) => {
